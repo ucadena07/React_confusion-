@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Menu from './MenuComponent';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 
 class DishDetail extends Component {
@@ -17,7 +16,7 @@ class DishDetail extends Component {
 		if (dish != null) {
 			return (
 				<Card>
-					<CardImg src={dish.image} alt={dish.name} />
+					<CardImg top src={dish.image} alt={dish.name} />
 					<CardBody>
 						<CardTitle>{dish.name}</CardTitle>
 						<CardText>{dish.description}</CardText>
@@ -35,15 +34,28 @@ class DishDetail extends Component {
 
 	renderComments(dish) {
 		if (dish != null){
-			const comments = dish.comments.map( comment => {
+			const options = {year: 'numeric', month: 'short', day: 'numeric'};
+			const comments = this.props.dish.comments.map( (comment) => {
 				return (
 					<div key={comment.id}>
-						<p>{comment.comment}</p>
-						<p>{`--${comment.author}, ${comment.date}`}</p>
+						<ul className="list-unstyled">
+							<li className="media">
+								<div className="media-body">
+									<p>{comment.comment}</p>
+									<p>-- {comment.author}, {new Date(comment.date).toLocaleDateString('en-US', options)}</p>
+								</div>
+							</li>
+						</ul>
 					</div>
 				);
-			})
-			return comments;
+
+			});
+			return(
+				<div>
+					<h4>Comments</h4>
+					{comments}
+				</div>
+			)
 		}else {
 			return(
 				<div></div>
@@ -55,14 +67,19 @@ class DishDetail extends Component {
 
 	render() {
 		return(
-			<div className="row">
-				<div className="col-12 col-md-5 m-1">
-					{this.renderDish(this.props.selectedDish)}
+			<div className="container">
+				<div className="row">
+					<div className="col-12 col-md-5 m-1">
+						{this.renderDish(this.props.dish)}
+					</div>
+					<div className="col-12 col-md-5 m-1">
+						{this.renderComments(this.props.dish)}	
+
+					</div>
+					
 				</div>
-				{this.props.selectedDish && this.props.selectedDish.comments &&<div className="col-12 col-md-5 m-1">
-					<h4>Comments</h4>
-						{this.renderComments(this.props.selectedDish)}	
-				</div>}
+
+
 			</div>
 		)
 
