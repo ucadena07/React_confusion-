@@ -4,14 +4,6 @@ import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 class DishDetail extends Component {
 
-	constructor(props){
-		super(props);
-
-		this.state = {
-			selectedDish: null
-		}
-	}
-
 	renderDish(dish) {
 		if (dish != null) {
 			return (
@@ -32,31 +24,26 @@ class DishDetail extends Component {
 
 	}
 
-	renderComments(dish) {
-		if (dish != null){
+	renderComments(comments) {
+		if (comments != null) {
 			const options = {year: 'numeric', month: 'short', day: 'numeric'};
-			const comments = this.props.dish.comments.map( (comment) => {
-				return (
-					<div key={comment.id}>
-						<ul className="list-unstyled">
-							<li className="media">
-								<div className="media-body">
+			return(
+				<div className="col-12 col-md-5 m-1">
+					<h4>Comments</h4>
+					<ul className="list-unstyled">
+						{comments.map((comment) => {
+							return(
+								<li key={comment.id}>
 									<p>{comment.comment}</p>
 									<p>-- {comment.author}, {new Date(comment.date).toLocaleDateString('en-US', options)}</p>
-								</div>
-							</li>
-						</ul>
-					</div>
-				);
-
-			});
-			return(
-				<div>
-					<h4>Comments</h4>
-					{comments}
+								</li>
+							);
+						})}
+					</ul>
 				</div>
 			)
-		}else {
+		}
+		else{
 			return(
 				<div></div>
 			);
@@ -66,23 +53,23 @@ class DishDetail extends Component {
 
 
 	render() {
-		return(
-			<div className="container">
-				<div className="row">
-					<div className="col-12 col-md-5 m-1">
-						{this.renderDish(this.props.dish)}
+		if (this.props.dish != null)
+			return(
+				<div className="container">
+					<div className="row">
+						<div className="col-12 col-md-5 m-1">
+							{this.renderDish(this.props.dish)}
+						</div>
+							{this.renderComments(this.props.dish.comments)}		
 					</div>
-					<div className="col-12 col-md-5 m-1">
-						{this.renderComments(this.props.dish)}	
 
-					</div>
-					
+
 				</div>
-
-
-			</div>
-		)
-
+			);
+		else
+				return (
+					<div></div>
+				);
 	}
 	
   
