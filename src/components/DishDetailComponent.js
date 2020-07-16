@@ -25,7 +25,7 @@ import { Control, LocalForm, Errors } from 'react-redux-form';
 
 	}
 
-	function RenderComments({comments}) {
+	function RenderComments({comments, addComment, dishId}) {
 		if (comments != null) {
 			const option = {year: 'numeric', month: 'short', day: 'numeric'};
 			return(
@@ -41,7 +41,7 @@ import { Control, LocalForm, Errors } from 'react-redux-form';
 							);
 						})}
 					</ul>
-					<CommentForm/>
+					<CommentForm dishId={dishId} addComment={addComment}/>
 				</div>
 			)
 		}
@@ -77,8 +77,8 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 		}
 
 		handleSubmit(values) {
-			console.log("Current State is: " + JSON.stringify(values));
-			alert("Current State is: " + JSON.stringify(values));
+			this.toggleModal();
+			this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
 		}
 
 		render(){
@@ -103,8 +103,8 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 									</Row>
 									<Row className="form-group">
 										<Col>
-										<Label htmlFor="name">Your Name</Label>
-										<Control.text model=".name" id="name"
+										<Label htmlFor="author">Your Name</Label>
+										<Control.text model=".author" id="author"
 											className="form-control"
 											validators={{
 												required, minLength: minLength(3), maxLength: maxLength(15)
@@ -112,7 +112,7 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 											/>
 											<Errors
 												className="text-danger"
-												model=".name"
+												model=".author"
 												show="touched"
 												messages={{
 														required: 'Required',
@@ -162,7 +162,9 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 						<div className="col-12 col-md-5 m-1">
 							<RenderDish dish={props.dish} />
 				</div>
-							<RenderComments comments={props.comments} />		
+							<RenderComments comments={props.comments} 
+							addComment={props.addComment}
+							dishId={props.dish.id}/>		
 			</div>
 		</div>
 	);
