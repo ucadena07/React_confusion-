@@ -26,7 +26,7 @@ import { baseUrl } from '../shared/baseUrl';
 
 	}
 
-	function RenderComments({comments, addComment, dishId}) {
+	function RenderComments({comments, postComment, dishId}) {
 		if (comments != null) {
 			const option = {year: 'numeric', month: 'short', day: 'numeric'};
 			return(
@@ -42,7 +42,7 @@ import { baseUrl } from '../shared/baseUrl';
 							);
 						})}
 					</ul>
-					<CommentForm dishId={dishId} addComment={addComment}/>
+					<CommentForm dishId={dishId} postComment={postComment}/>
 				</div>
 			)
 		}
@@ -79,7 +79,7 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 
 		handleSubmit(values) {
 			this.toggleModal();
-			this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+			this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
 		}
 
 		render(){
@@ -124,7 +124,7 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 										</Col>
 									</Row>
 									<Row className="form-group">
-										<Col>``
+										<Col>
 										<Label htmlFor="comment">Comment</Label>
 										<Control.textarea model=".comment" id="comment"
 											rows="6" className="form-control" />
@@ -182,7 +182,7 @@ const minLength = (len) => (val) => !(val) || (val.length >= len);
 							<RenderDish dish={props.dish} />
 				</div>
 							<RenderComments comments={props.comments} 
-							addComment={props.addComment}
+							postComment={props.postComment}
 							dishId={props.dish.id}/>		
 			</div>
 		</div>
